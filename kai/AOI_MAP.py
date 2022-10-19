@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # @Time           2022/10/17 4:17 PM
-# @File           excel_kai.py
-# @Description    excel文件处理
+# @File           AOI_MAP.py
+# @Description    从文件名提取坐标并作图
 # @Author
 #
 
@@ -199,7 +199,7 @@ def test_4(filename):
 def run():
     cur_dir = os.path.dirname(__file__)
 
-    new_rows = [["filename", "坐标x", "坐标y"]]
+    new_rows = [["filename", "横坐标x", "纵坐标y"]]
     for root, dirs, files in os.walk(cur_dir):
         for file in files:
             if 'JPG' not in file:
@@ -211,10 +211,7 @@ def run():
             a = name.split('_')
             print(f'分割后的结果是:{a}')
 
-            # lstrip: 把字符串左边的 - 去掉。
-            # 把列表中的坐标取出来然后去掉 -
-            x = a[1].lstrip('-')
-            y = a[2].lstrip('-')
+            x, y = a[2], a[1]
             print(f'提取出的坐标x是:{x},坐标y是{y}')
 
             new_rows.append([name, int(x), int(y)])
@@ -230,18 +227,25 @@ def run():
     chart = ScatterChart()
     chart.style = 10
     chart.title = "AOI点位图"
-    chart.x_axis.title = 'X'
-    chart.y_axis.title = 'Y'
+    # chart.x_axis.title = 'X'
+    # chart.y_axis.title = 'Y'
 
     # 设置图表大小
-    chart.height = 30
-    chart.width = 50
+    chart.height = 15
+    chart.width = 25
 
     # x，y轴坐标范围
     chart.x_axis.scaling.min = -365000
     chart.x_axis.scaling.max = 365000
     chart.y_axis.scaling.min = -460000
     chart.y_axis.scaling.max = 460000
+
+    # 调整x轴方向
+    chart.x_axis.scaling.orientation = "maxMin"
+
+    # 去掉网格线
+    chart.x_axis.majorGridlines = None
+    chart.y_axis.majorGridlines = None
 
     # 不加图例
     chart.legend = None
